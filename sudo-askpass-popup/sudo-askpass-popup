@@ -9,7 +9,7 @@ mkfifo -m 600 "$fifo"
 trap 'rm -rf "$dir"' EXIT
 
 setsid uwsm-app -- xdg-terminal-exec --app-id=org.omarchy.terminal --title="sudo password" -e bash -c '
-  echo "Claude Code is requesting sudo access."
+  echo "Authentication required."
   echo
   if command -v gum >/dev/null; then
     pw=$(gum input --password --header "$1" --placeholder "")
