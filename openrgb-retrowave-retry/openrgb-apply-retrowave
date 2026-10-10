@@ -1,0 +1,28 @@
+#!/bin/bash
+# Launch OpenRGB with the retrowave profile, retrying if the Corsair K70 / Nightsword
+# weren't detected (they're often not ready yet right after login).
+
+LOGDIR="$HOME/.config/OpenRGB/logs"
+sleep 3
+
+for attempt in 1 2 3 4; do
+  pkill -x openrgb && sleep 1
+  setsid openrgb --noautoconnect --profile retrowave >/dev/null 2>&1 &
+  pid=$!
+
+  # Wait for this run's profile to finish loading (up to ~20s)
+  for _ in $(seq 40); do
+    sleep 0.5
+    log=$(ls -t "$LOGDIR"/*.log 2>/dev/null | head -1)
+    grep -q 'Profile loading' "$log" 2>/dev/null && break
+  done
+  sleep 0.5
+
+  if grep -q 'K70' "$log" && grep -q 'Nightsword' "$log"; then
+    exit 0
+  fi
+  logger -t openrgb-apply "attempt $attempt: keyboard/mouse not detected"
+  [ "$attempt" -eq 4 ] && exit 1  # leave last run going so other devices stay lit
+  kill "$pid" 2>/dev/null
+  sleep 3
+done

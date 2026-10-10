@@ -1,0 +1,11 @@
+[Unit]
+Description=Update user Flatpak apps daily
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1d
+Persistent=true
+RandomizedDelaySec=15min
+
+[Install]
+WantedBy=timers.target

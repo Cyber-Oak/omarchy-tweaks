@@ -1,0 +1,40 @@
+#!/bin/bash
+# Keep the onboard audio on 5.1 surround, switching to stereo only while
+# headphones are plugged into the front-panel jack (the Headphones port
+# only exists in the stereo profile).
+
+CARD=alsa_card.pci-0000_00_1f.3
+SURROUND=output:analog-surround-51+input:analog-stereo
+STEREO=output:analog-stereo+input:analog-stereo
+
+apply() {
+  local state hp active want default
+  state=$(pactl -f json list cards 2>/dev/null | jq -r --arg c "$CARD" \
+    '.[] | select(.name == $c) | "\(.ports["analog-output-headphones"].availability) \(.active_profile)"')
+  [ -z "$state" ] && return
+  read -r hp active <<<"$state"
+
+  if [ "$hp" = "available" ]; then want=$STEREO; else want=$SURROUND; fi
+  [ "$active" = "$want" ] && return
+
+  default=$(pactl get-default-sink 2>/dev/null)
+  pactl set-card-profile "$CARD" "$want" || return
+
+  # Follow the new sink only if this card was already the default output.
+  if [[ "$default" == alsa_output.pci-0000_00_1f.3.* ]]; then
+    local sink
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+      sink=$(pactl list short sinks | awk '$2 ~ /^alsa_output\.pci-0000_00_1f\.3\./ {print $2; exit}')
+      [ -n "$sink" ] && break
+      sleep 0.2
+    done
+    [ -n "$sink" ] && pactl set-default-sink "$sink"
+  fi
+}
+
+apply
+pactl subscribe | while read -r line; do
+  case "$line" in
+    *"'change' on card"* | *"'new' on card"*) apply ;;
+  esac
+done

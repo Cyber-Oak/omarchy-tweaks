@@ -1,0 +1,7 @@
+[Unit]
+Description=Check for pacman/AUR updates and notify
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/update-check-notify
+TimeoutStartSec=infinity

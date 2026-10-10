@@ -1,0 +1,23 @@
+#!/bin/bash
+# SUDO_ASKPASS helper: pops up a floating terminal asking for the sudo password.
+# Usage: SUDO_ASKPASS=~/.local/bin/sudo-askpass-popup sudo -A <command>
+
+prompt="${1:-Password:}"
+dir=$(mktemp -d)
+fifo="$dir/pw"
+mkfifo -m 600 "$fifo"
+trap 'rm -rf "$dir"' EXIT
+
+setsid uwsm-app -- xdg-terminal-exec --app-id=org.omarchy.terminal --title="sudo password" -e bash -c '
+  echo "Claude Code is requesting sudo access."
+  echo
+  if command -v gum >/dev/null; then
+    pw=$(gum input --password --header "$1" --placeholder "")
+  else
+    read -rsp "$1 " pw
+  fi
+  printf "%s\n" "$pw" > "$2"
+' _ "$prompt" "$fifo" >/dev/null 2>&1 &
+
+# Give up if the window is closed without entering anything
+timeout 180 cat "$fifo"

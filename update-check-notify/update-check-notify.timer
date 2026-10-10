@@ -1,0 +1,9 @@
+[Unit]
+Description=Check for system updates (script enforces once per 24h)
+
+[Timer]
+OnStartupSec=1min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target
