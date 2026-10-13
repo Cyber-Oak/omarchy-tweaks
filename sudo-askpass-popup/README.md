@@ -22,5 +22,5 @@ Or export `SUDO_ASKPASS` in your shell profile and just use `sudo -A`.
 
 ## Notes
 
-- The message shown in the window ("Claude Code is requesting sudo access.") is just a label. Change it to whatever suits you.
+- The message shown in the window ("Authentication required.") is just a label. Change it to whatever suits you.
 - The terminal window uses the app ID `org.omarchy.terminal`, so Omarchy's floating terminal rules apply to it.
