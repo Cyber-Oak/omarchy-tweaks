@@ -30,6 +30,16 @@ install -m 755 openrgb-apply-retrowave ~/.local/bin/
 
 Then add the line from [autostart.lua](autostart.lua) to `~/.config/hypr/autostart.lua`.
 
+OpenRGB 1.1 opens a "Zone Initialization" dialog at startup when it finds unconfigured
+resizable zones, even with `--startminimized`. Turn that off once (with OpenRGB closed):
+
+```bash
+f=~/.config/OpenRGB/OpenRGB.json
+jq '.UserInterface = ((.UserInterface // {}) + {run_zone_checks: false})' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+```
+
+That's the same as unchecking Settings → General → "Run Zone Checks on Rescan" in the GUI.
+
 ## Troubleshoot
 
 ```bash

@@ -31,3 +31,11 @@ Shared log for Claude sessions on **infinity** (desktop) and **forge** (ThinkPad
 **Rejected:** `--server` with no GUI. It would probably also keep the process alive, but it opens an SDK port nobody uses. The tray is how the GUI normally runs, and Nick can open it from there.
 
 **Loose ends:** Not yet verified on a cold boot/login.
+
+## 2026-10-18 — infinity
+
+**What I did:** Stopped OpenRGB from popping up a window at login. **Cause:** the window wasn't the main GUI. It was OpenRGB 1.1's "Zone Initialization" dialog (`OpenRGBZoneInitializationDialog`), which runs zone-size checks at startup and opens for unconfigured resizable zones even with `--startminimized`. **Fix:** I set `"UserInterface": {"run_zone_checks": false}` in ~/.config/OpenRGB/OpenRGB.json (backup: OpenRGB.json.bak-zonecheck). That's the GUI's "Run Zone Checks on Rescan" setting. I edited it with OpenRGB closed, then re-ran openrgb-apply-retrowave: it exited 0 (K70 and Nightsword detected), the process is still running, and no OpenRGB window is open. I documented the step in openrgb-retrowave-retry/README.md. The script and autostart are unchanged.
+
+**Rejected:** switching to `--server` with no GUI. It would also avoid the dialog, but the reasons in the 10-17 entry still hold, and the one-setting fix is smaller.
+
+**Loose ends:** Not yet verified on a fresh login. If the dialog comes back, check that the setting survived in OpenRGB.json. Configuring the zones in Zone Manager would be the other option.
