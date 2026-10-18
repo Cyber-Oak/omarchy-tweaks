@@ -8,11 +8,15 @@ Some USB RGB devices are not ready right after login. OpenRGB starts, does not s
 
 ## How it works
 
-1. Waits 3 seconds, then starts OpenRGB with the profile.
-2. Watches OpenRGB's newest log in `~/.config/OpenRGB/logs/` until the profile finishes loading.
+1. Waits 3 seconds, then starts OpenRGB minimized to the tray with the profile.
+2. Watches OpenRGB's newest log in `~/.config/OpenRGB/logs/` until device detection completes.
 3. If the log mentions both expected devices, it is done.
 4. Otherwise it kills OpenRGB, waits, and tries again, up to 4 attempts. On the last attempt OpenRGB is left running so the devices that were detected stay lit.
 5. Each failed attempt is logged to the journal under the tag `openrgb-apply`.
+
+## Why it stays running (OpenRGB 1.1+)
+
+OpenRGB 1.1 applies a `--profile` given on the command line and then exits. Some devices, such as the Corsair MM700 mouse pad, go back to their built-in effect as soon as OpenRGB stops driving them. The script uses `--startminimized` so OpenRGB keeps running in the tray. (1.0rc3 kept running and logged `Profile loading` lines. 1.1 logs neither, so the script now waits for `Detection completed`.)
 
 ## Adapt it
 

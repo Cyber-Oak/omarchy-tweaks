@@ -1,22 +1,25 @@
 #!/bin/bash
 # Launch OpenRGB with the retrowave profile, retrying if the Corsair K70 / Nightsword
 # weren't detected (they're often not ready yet right after login).
+# OpenRGB >= 1.1 exits after applying a profile from the CLI, and some devices
+# (e.g. the MM700 pad) drop back to their hardware effect when it does, so it
+# runs minimized to the tray to keep driving them.
 
 LOGDIR="$HOME/.config/OpenRGB/logs"
 sleep 3
 
 for attempt in 1 2 3 4; do
   pkill -x openrgb && sleep 1
-  setsid openrgb --noautoconnect --profile retrowave >/dev/null 2>&1 &
+  setsid openrgb --startminimized --noautoconnect --profile retrowave >/dev/null 2>&1 &
   pid=$!
 
-  # Wait for this run's profile to finish loading (up to ~20s)
+  # Wait for this run's device detection to finish (up to ~20s)
   for _ in $(seq 40); do
     sleep 0.5
     log=$(ls -t "$LOGDIR"/*.log 2>/dev/null | head -1)
-    grep -q 'Profile loading' "$log" 2>/dev/null && break
+    grep -q 'Detection completed' "$log" 2>/dev/null && break
   done
-  sleep 0.5
+  sleep 1
 
   if grep -q 'K70' "$log" && grep -q 'Nightsword' "$log"; then
     exit 0

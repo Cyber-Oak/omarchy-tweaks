@@ -23,3 +23,11 @@ Shared log for Claude sessions on **infinity** (desktop) and **forge** (ThinkPad
 **What I did:** Added a systemd 262 note to tpm2-autologin/README.md. **Why:** the omarchy update to systemd 262 broke TPM auto-unlock. The new `systemd-pcrosseparator.service` extends PCR 7 in the initrd before cryptsetup, so the old PCR 7 seal stopped matching. Nick re-enrolled by hand in a real terminal (the auto-mode classifier blocked Claude from doing it, and `!` has no TTY for the sudo and LUKS prompts). The new TPM2 token is in **keyslot 2**. Old slot 1 is wiped and the passphrase is still in slot 0. I rejected masking pcrosseparator via the cmdline (option B) because it gives up the new firmware-PCR sealing.
 
 **State / loose ends:** Not yet verified by a reboot. Next boot should go straight to the desktop. If it still prompts, check `journalctl -b | grep systemd-cryptsetup`. Full post-update check in ~/Workbench/WORKLOG.md.
+
+## 2026-10-17 23:45 EDT — infinity
+
+**What I did:** Fixed the Corsair MM700 mouse pad not taking the retrowave colors after tonight's update. **Cause:** the update moved openrgb from 1.0rc3 to 1.1. Version 1.1 migrated `retrowave.orp` to `~/.config/OpenRGB/profiles/retrowave.json` (the migration is fine, and the MM700 entry and its hidraw location still match). But `openrgb --profile` now applies the profile and **exits**. The MM700 goes back to its hardware effect once nothing is driving it. With 1.0rc3, the process stayed running. **Fix:** openrgb-apply-retrowave now launches with `--startminimized`, so it keeps running in the tray. It also waits for `Detection completed` instead of `Profile loading`, which 1.1 no longer logs. I installed it to ~/.local/bin and ran it. Nick confirmed the pad is lit correctly. The autostart.lua line is unchanged.
+
+**Rejected:** `--server` with no GUI. It would probably also keep the process alive, but it opens an SDK port nobody uses. The tray is how the GUI normally runs, and Nick can open it from there.
+
+**Loose ends:** Not yet verified on a cold boot/login.
