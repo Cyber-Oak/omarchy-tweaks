@@ -36,7 +36,7 @@ sudo limine-mkinitcpio
 
 ## Re-enrolling (when the passphrase prompt comes back)
 
-A BIOS/firmware update or toggling Secure Boot changes PCR 7, so the TPM refuses to release the key and you get the passphrase prompt again. Type your passphrase, then re-enroll:
+A BIOS/firmware update or toggling Secure Boot changes PCR 7, so the TPM refuses to release the key and you get the passphrase prompt again. So does the systemd 262 upgrade: its new `systemd-pcrosseparator.service` extends an "os-separator" measurement into PCR 7 in the initrd, before cryptsetup runs, and the journal shows `TPM policy does not match current system state`. Re-enrolling once while booted fixes it, because the current PCR 7 already includes the separator. Type your passphrase, then re-enroll:
 
 ```bash
 sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 /dev/<your-luks-partition>
