@@ -17,3 +17,9 @@ Shared log for Claude sessions on **infinity** (desktop) and **forge** (ThinkPad
 **Cross-machine setup today:** Syncthing pairs infinity ↔ forge for ~/Workbench only (folder id `workbench`); git repos sync through GitHub, not Syncthing. Claude config syncs via claudedot → Cyber-Oak/claude-sync. Session history sync via ccsync being set up next.
 
 **Loose ends / next steps:** Many tweaks are hardware-specific to infinity (1440p monitor, K70/Nightsword RGB, 5.1 audio, TPM). Check which apply to forge before installing anything there.
+
+## 2026-10-17 23:15 EDT — infinity
+
+**What I did:** Added a systemd 262 note to tpm2-autologin/README.md. **Why:** the omarchy update to systemd 262 broke TPM auto-unlock. The new `systemd-pcrosseparator.service` extends PCR 7 in the initrd before cryptsetup, so the old PCR 7 seal stopped matching. Nick re-enrolled by hand in a real terminal (the auto-mode classifier blocked Claude from doing it, and `!` has no TTY for the sudo and LUKS prompts). The new TPM2 token is in **keyslot 2**. Old slot 1 is wiped and the passphrase is still in slot 0. I rejected masking pcrosseparator via the cmdline (option B) because it gives up the new firmware-PCR sealing.
+
+**State / loose ends:** Not yet verified by a reboot. Next boot should go straight to the desktop. If it still prompts, check `journalctl -b | grep systemd-cryptsetup`. Full post-update check in ~/Workbench/WORKLOG.md.
