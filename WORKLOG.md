@@ -39,3 +39,11 @@ Shared log for Claude sessions on **infinity** (desktop) and **forge** (ThinkPad
 **Rejected:** switching to `--server` with no GUI. It would also avoid the dialog, but the reasons in the 10-17 entry still hold, and the one-setting fix is smaller.
 
 **Loose ends:** Not yet verified on a fresh login. If the dialog comes back, check that the setting survived in OpenRGB.json. Configuring the zones in Zone Manager would be the other option.
+
+## 2026-10-21 14:30 EDT — forge
+
+**What I did:** Added workspace-app-icons/, which holds the `cyberoak.workspaces` Omarchy Shell bar plugin (per-window icons next to workspace numbers) and a README. **forge's copy is now canonical.** It was rebuilt on 10-21 from the 10-17 infinity worklog description; infinity's original was never in a repo, and infinity was unreachable over SSH. Nick picked this machine as the source. Scrubbing: the files had no home paths, device names or UUIDs. The id `cyberoak.workspaces` is Nick's handle and must match shell.json, so it stays. manifest.json: author changed from "Omarchy" (clone default) to "Cyber-Oak", and the description now mentions icons.
+
+**Exception to this repo's "documented copies, not symlinked" rule:** on forge, `~/.config/omarchy/plugins/cyberoak.workspaces` is now a **symlink** into this repo, at Nick's request, so both machines run one copy. It loads fine as a symlink: `omarchy plugin list` shows it enabled. Verified on forge: icons render (screenshot), and real left clicks (via a temporary uinput mouse) on the "1" label, the Chrome icon on 2, and the "3" label each switched to that workspace.
+
+**Next (infinity):** see ~/Workbench/WORKLOG.md for the adoption steps.

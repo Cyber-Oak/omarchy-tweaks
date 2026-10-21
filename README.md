@@ -17,3 +17,4 @@ Personal customizations layered on top of a stock [Omarchy](https://omarchy.org)
 | [hyprland-gaming](hyprland-gaming/) | Hyprland rules that keep Steam and other windows from interrupting games |
 | [gdk-scale-1440p](gdk-scale-1440p/) | Fix GTK/XWayland apps looking double-size on a 1440p monitor |
 | [steam-controller-pairing](steam-controller-pairing/) | Fixing a Steam Controller Puck with a broken pairing |
+| [workspace-app-icons](workspace-app-icons/) | Bar widget that shows open-window icons next to each workspace number |

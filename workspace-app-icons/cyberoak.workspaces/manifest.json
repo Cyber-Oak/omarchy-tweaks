@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "cyberoak.workspaces",
+  "name": "My Workspaces",
+  "version": "1.0.0",
+  "author": "Cyber-Oak",
+  "description": "Workspace numbers with an icon for each open window",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Workspaces.qml"
+  },
+  "barWidget": {
+    "displayName": "My Workspaces",
+    "description": "Workspace numbers with an icon for each open window",
+    "category": "Compositor",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.workspaces"
+  }
+}
